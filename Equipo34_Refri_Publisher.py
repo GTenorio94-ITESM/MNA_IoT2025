@@ -10,8 +10,12 @@ HIVEMQ_PORT = 8883
 HIVEMQ_USERNAME = "hivemq.webclient.1749677139128"
 HIVEMQ_PASSWORD = "lT8#r3G;1Ha0zt<kS>UC"
 
+MACHINE_NAME = "GTenorio"
+
 # Topicos
 TOPIC_TEMP = "sensores/temperatura"
+TOPIC_HUMID = "sensores/humedad"
+TOPIC_PING = "sensores/health"
 ALERT_TEMP = "alertas/temperatura"
 ALERT_HUMID = "alertas/humedad"
 
@@ -110,21 +114,33 @@ def main():
             message = {
                 "timestamp": datetime.now().isoformat(),
                 "sensor_id": f"Refrigerador: {sensor}",
-                "temperature": random.randint(-5, 10),
-                "humidity": random.randint(20, 65),
                 "location": f"Almacen {almacen}",
-                "alerta": ""
+                "origin": MACHINE_NAME
             }
 
-            if(message["temperature"] > 4 or message["temperature"] < 1):
-                message["alerta"] = "Temperatura"
-                publisher.publish_message(ALERT_TEMP, message)
             
-            if(message["humidity"] > 55 or message["humidity"] < 30):
-                message["alerta"] = "Humedad"
-                publisher.publish_message(ALERT_HUMID, message)
 
-            publisher.publish_message(TOPIC_TEMP, message)
+            if (MACHINE_NAME == "Lucia"):
+                message["temperature"] = random.randint(-5, 10)
+                publisher.publish_message(TOPIC_TEMP, message)
+
+            elif (MACHINE_NAME == "German"):
+                message["humidity"] = random.randint(20, 65)
+                publisher.publish_message(TOPIC_HUMID, message)
+
+            elif(MACHINE_NAME == "GTenorio"):
+                publisher.publish_message(TOPIC_PING, message)
+
+                message["temperature"] = random.randint(-5, 10)
+                message["humidity"] = random.randint(20, 65)
+
+                if(message["temperature"] > 4 or message["temperature"] < 1):
+                    message["alerta"] = "Temperatura"
+                    publisher.publish_message(ALERT_TEMP, message)
+                
+                if(message["humidity"] > 55 or message["humidity"] < 30):
+                    message["alerta"] = "Humedad"
+                    publisher.publish_message(ALERT_HUMID, message)
             
             counter += 1
             print("Esperando 5 segundos...")

@@ -11,8 +11,10 @@ HIVEMQ_PASSWORD = "lT8#r3G;1Ha0zt<kS>UC"
 
 TOPICS = [
     ("sensores/temperatura", 1),
+    ("sensores/humedad", 1),
     ("alertas/humedad", 1),
-    ("alertas/temperatura", 1)
+    ("alertas/temperatura", 1),
+    ("sensores/health", 1),
 ]
 
 class MQTTSubscriber:
@@ -76,6 +78,9 @@ class MQTTSubscriber:
                 if "sensores/temperatura" in topic:
                     self.process_temperature_data(json_data)
 
+                if "sensores/humedad" in topic:
+                    self.process_humidity_data(json_data)
+
                 if topic.startswith("alertas"):
                     self.process_alert_data(json_data)
 
@@ -117,19 +122,31 @@ class MQTTSubscriber:
         except Exception as e:
             print(f"Error al procesar datos de temperatura: {e}")
     
+    def process_humidity_data(self, data):
+        """Procesa datos específicos de sensores de temperatura"""
+        try:
+            humidity = data.get('humidity')
+            sensor_id = data.get('sensor_id')
+            
+            if humidity is not None:
+                print(f"Temperatura: {temp}°C")
+            
+            if sensor_id:
+                print(f"Sensor ID: {sensor_id}")
+                
+        except Exception as e:
+            print(f"Error al procesar datos de temperatura: {e}")
+    
+
 
     def process_temperature_data(self, data):
         """Procesa datos específicos de sensores de temperatura"""
         try:
             temp = data.get('temperature')
-            humidity = data.get('humidity')
             sensor_id = data.get('sensor_id')
             
             if temp is not None:
                 print(f"Temperatura: {temp}°C")
-             
-            if humidity is not None:
-                print(f"Humedad: {humidity}%")
             
             if sensor_id:
                 print(f"Sensor ID: {sensor_id}")

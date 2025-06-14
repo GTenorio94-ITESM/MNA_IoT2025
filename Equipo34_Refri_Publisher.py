@@ -118,28 +118,28 @@ def main():
                 "origin": MACHINE_NAME
             }
 
-            
+            temperatura = random.randint(-5, 10)
+            humedad = random.randint(20, 65)
 
             if (MACHINE_NAME == "Lucia"):
-                message["temperature"] = random.randint(-5, 10)
+                message["temperature"] = temperatura
                 publisher.publish_message(TOPIC_TEMP, message)
 
             elif (MACHINE_NAME == "German"):
-                message["humidity"] = random.randint(20, 65)
+                message["humidity"] = humedad
                 publisher.publish_message(TOPIC_HUMID, message)
 
             elif(MACHINE_NAME == "GTenorio"):
                 publisher.publish_message(TOPIC_PING, message)
 
-                message["temperature"] = random.randint(-5, 10)
-                message["humidity"] = random.randint(20, 65)
-
                 if(message["temperature"] > 4 or message["temperature"] < 1):
                     message["alerta"] = "Temperatura"
+                    message["temperature"] = temperatura
                     publisher.publish_message(ALERT_TEMP, message)
                 
                 if(message["humidity"] > 55 or message["humidity"] < 30):
                     message["alerta"] = "Humedad"
+                    message["humidity"] = humedad
                     publisher.publish_message(ALERT_HUMID, message)
             
             counter += 1

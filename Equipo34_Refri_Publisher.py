@@ -3,6 +3,7 @@ import json
 import time
 import random
 from datetime import datetime
+import os
 
 # Conexión HiveMQ
 HIVEMQ_HOST = "0403acbf0477465fb688063c983d674c.s1.eu.hivemq.cloud"
@@ -10,7 +11,7 @@ HIVEMQ_PORT = 8883
 HIVEMQ_USERNAME = "hivemq.webclient.1749677139128"
 HIVEMQ_PASSWORD = "lT8#r3G;1Ha0zt<kS>UC"
 
-MACHINE_NAME = "GTenorio"
+MACHINE_NAME = os.environ['MACHINE_NAME']
 
 # Topicos
 TOPIC_TEMP = "sensores/temperatura"
@@ -132,12 +133,12 @@ def main():
             elif(MACHINE_NAME == "GTenorio"):
                 publisher.publish_message(TOPIC_PING, message)
 
-                if(message["temperature"] > 4 or message["temperature"] < 1):
+                if(temperatura > 4 or temperatura < 1):
                     message["alerta"] = "Temperatura"
                     message["temperature"] = temperatura
                     publisher.publish_message(ALERT_TEMP, message)
                 
-                if(message["humidity"] > 55 or message["humidity"] < 30):
+                if(humedad > 55 or humedad < 30):
                     message["alerta"] = "Humedad"
                     message["humidity"] = humedad
                     publisher.publish_message(ALERT_HUMID, message)

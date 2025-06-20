@@ -6,17 +6,6 @@ import signal
 from collections import deque
 import statistics
 
-COLORS = {
-    'RESET': '\033[0m',
-    'BOLD': '\033[1m',
-    'RED': '\033[91m',
-    'GREEN': '\033[92m',
-    'YELLOW': '\033[93m',
-    'BLUE': '\033[94m',
-    'MAGENTA': '\033[95m',
-    'CYAN': '\033[96m'
-}
-
 CLOUDAMQP_URL = "amqps://ekpnsqvv:7-52x28JbCE3ukCG3a2QDLPwhITbYTKT@turkey.rmq.cloudamqp.com/ekpnsqvv"
 QUEUE_NAME = "temperature_readings"
 HUMIDQ_NAME = "humidity_readings"

@@ -6,6 +6,17 @@ import signal
 from collections import deque
 import statistics
 
+COLORS = {
+    'RESET': '\033[0m',
+    'BOLD': '\033[1m',
+    'RED': '\033[91m',
+    'GREEN': '\033[92m',
+    'YELLOW': '\033[93m',
+    'BLUE': '\033[94m',
+    'MAGENTA': '\033[95m',
+    'CYAN': '\033[96m'
+}
+
 CLOUDAMQP_URL = "amqps://ekpnsqvv:7-52x28JbCE3ukCG3a2QDLPwhITbYTKT@turkey.rmq.cloudamqp.com/ekpnsqvv"
 QUEUE_NAME = "temperature_readings"
 HUMIDQ_NAME = "humidity_readings"
@@ -51,9 +62,9 @@ class HumidityMonitor:
         alerts = []
         
         if humidity > HUMIDITY_ALERT_HIGH:
-            alerts.append(f"HIGH TEMPERATURE ALERT: {humidity}% exceeds {HUMIDITY_ALERT_HIGH}%")
+            alerts.append(f" \033[91m HIGH HUMIDITY ALERT: {humidity}% exceeds {HUMIDITY_ALERT_HIGH}% \033[0m ")
         elif humidity < HUMIDITY_ALERT_LOW:
-            alerts.append(f"LOW TEMPERATURE ALERT: {humidity}% below {HUMIDITY_ALERT_LOW}%")
+            alerts.append(f" \033[91m LOW HUMIDITY ALERT: {humidity}% below {HUMIDITY_ALERT_LOW}% \033[0m ")
         
         self.humidity_history.append(humidity)
         
@@ -62,7 +73,7 @@ class HumidityMonitor:
             hum_change = abs(max(recent_temps) - min(recent_temps))
             
             if hum_change > 5.0:
-                alerts.append(f"RAPID HUMIDITY CHANGE: {hum_change:.1f}% variation detected")
+                alerts.append(f" \033[91m RAPID HUMIDITY CHANGE: {hum_change:.1f}% variation detected \033[0m ")
         
         return alerts
     
@@ -199,9 +210,9 @@ class TemperatureMonitor:
         alerts = []
         
         if temperature > TEMPERATURE_ALERT_HIGH:
-            alerts.append(f"HIGH TEMPERATURE ALERT: {temperature}°C exceeds {TEMPERATURE_ALERT_HIGH}°C")
+            alerts.append(f" \033[91m HIGH TEMPERATURE ALERT: {temperature}°C exceeds {TEMPERATURE_ALERT_HIGH}°C \033[0m ")
         elif temperature < TEMPERATURE_ALERT_LOW:
-            alerts.append(f"LOW TEMPERATURE ALERT: {temperature}°C below {TEMPERATURE_ALERT_LOW}°C")
+            alerts.append(f" \033[91m LOW TEMPERATURE ALERT: {temperature}°C below {TEMPERATURE_ALERT_LOW}°C \033[0m ")
         
         self.temperature_history.append(temperature)
         
@@ -210,7 +221,7 @@ class TemperatureMonitor:
             temp_change = abs(max(recent_temps) - min(recent_temps))
             
             if temp_change > 5.0:
-                alerts.append(f"RAPID TEMPERATURE CHANGE: {temp_change:.1f}°C variation detected")
+                alerts.append(f" \033[91m RAPID TEMPERATURE CHANGE: {temp_change:.1f}°C variation detected \033[0m ")
         
         return alerts
     
